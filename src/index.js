@@ -20,7 +20,9 @@ class App extends React.Component {
   }
 
   calcPoints(word) {
-    if (word.length <= 4) {
+    if (word.length <= 2) {
+      return 0;
+    } else if (word.length <= 4) {
       return 1;
     } else if (word.length <= 5) {
       return 2;
