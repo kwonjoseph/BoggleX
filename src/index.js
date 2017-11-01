@@ -9,11 +9,85 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      dice: generateDice(),
       cw: '',
-      total: 0,
       scores: [],
-      dice: generateDice()
+      total: 0,
+      selected: [],
     }
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleSelect = this.handleSelect.bind(this);
+  }
+
+  calcPoints(word) {
+    if (word.length <= 4) {
+      return 1;
+    } else if (word.length <= 5) {
+      return 2;
+    } else if (word.length <= 6) {
+      return 3;
+    } else if (word.length <= 7) {
+      return 5;
+    } else {
+      return 11;
+    }
+  }
+
+  addScore() {
+    let scores = this.state.scores.slice();
+    let points = this.calcPoints(this.state.cw);
+    scores.push([this.state.cw, points]);
+    this.setState({
+      scores: scores,
+      total: this.state.total + points
+    });
+  }
+
+  resetSelected() {
+    let selectedDice = document.getElementsByClassName('selected');
+    Array.from(selectedDice).forEach(die => {
+      selectedDice[0].className = 'die white';
+    });
+
+    this.setState({
+      cw: '',
+      selected: []
+    })
+  }
+
+  toggleDie(e, letter, selected, prev, coord, isOneSpaceAway, isPrev) {
+    if (isNaN(prev[0]) || (isOneSpaceAway && !isPrev && e.target.className.split(' ')[1] === 'white')) {
+      selected.push(coord);
+      this.setState({
+        cw: this.state.cw + letter,
+        selected: selected
+      });
+      e.target.className = 'die babyblue selected';
+    } else if (isPrev) {
+      selected.pop();
+      this.setState({
+        cw: this.state.cw.substring(0 , this.state.cw.length - 1),
+        selected: selected
+      });
+      e.target.className = 'die white';
+    }
+  }
+
+
+  handleSubmit() {
+    this.addScore();
+    this.resetSelected();
+  }
+
+  handleSelect(e) {
+    let letter = e.target.innerHTML;
+    let selected = this.state.selected.slice();
+    let prev = selected[selected.length - 1] || [NaN, NaN, ''];
+    let coord = [parseInt(e.target.dataset.pos[0]), parseInt(e.target.dataset.pos[1]), letter];
+    let isOneSpaceAway = coord[0] <= prev[0] + 1 && coord[0] >= prev[0] - 1 && coord[1] <= prev[1] + 1 && coord[1] >= prev[1] - 1;
+    let isPrev = coord[0] === prev[0] && coord[1] === prev[1];
+
+    this.toggleDie(e, letter, selected, prev, coord, isOneSpaceAway, isPrev);
   }
 
   render () {
@@ -23,8 +97,8 @@ class App extends React.Component {
           <img src="logo.png" />
         </div>
         <div id="interface">
-          <Board dice={this.state.dice} />
-          <Input cw={this.state.cw} />
+          <Board dice={this.state.dice} handleSelect={this.handleSelect} />
+          <Input cw={this.state.cw} handleSubmit={this.handleSubmit} />
           <Scoreboard total={this.state.total} scores={this.state.scores} />
         </div>
       </div>

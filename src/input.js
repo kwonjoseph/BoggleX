@@ -6,7 +6,7 @@ const Input = (props) => (
     <b>
       Current Word:
     </b> {props.cw}
-    <button id="submitter">
+    <button id="submitter" onClick={props.handleSubmit}>
       Submit Word
     </button>
   </div>

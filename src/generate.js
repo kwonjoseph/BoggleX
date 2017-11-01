@@ -30,7 +30,7 @@ const generateDice = function() {
   ];
   dice = randomize(dice);
   dice.forEach(die => {
-    var rand = Math.floor(Math.random() * die.length);
+    let rand = Math.floor(Math.random() * die.length);
     rowOfDice.push(die[rand]);
     if (rowOfDice.length === 5) {
       board.push(rowOfDice);
@@ -38,21 +38,19 @@ const generateDice = function() {
     }
   });
   return board;
-}
+};
 
 const randomize = function(array) {
-  var length = array.length;
-  var idx = 0;
-  var temp;
-
+  let length = array.length;
+  let idx = 0;
+  let temp;
   while (length) {
     idx = Math.floor(Math.random() * length--);
-
     temp = array[length];
     array[length] = array[idx];
     array[idx] = temp;
   }
   return array;
-}
+};
 
 export default generateDice;
