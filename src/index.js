@@ -38,11 +38,13 @@ class App extends React.Component {
   addScore() {
     let scores = this.state.scores.slice();
     let points = this.calcPoints(this.state.cw);
-    scores.push([this.state.cw, points]);
-    this.setState({
-      scores: scores,
-      total: this.state.total + points
-    });
+    if (this.state.cw.length) {      
+      scores.push([this.state.cw, points]);
+      this.setState({
+        scores: scores,
+        total: this.state.total + points
+      });
+    }
   }
 
   resetSelected() {
