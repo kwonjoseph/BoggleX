@@ -38,7 +38,7 @@ class App extends React.Component {
   addScore() {
     let scores = this.state.scores.slice();
     let points = this.calcPoints(this.state.cw);
-    if (this.state.cw.length) {      
+    if (this.state.cw.length) {
       scores.push([this.state.cw, points]);
       this.setState({
         scores: scores,
@@ -68,11 +68,17 @@ class App extends React.Component {
       });
       e.target.className = 'die babyblue selected';
     } else if (isPrev) {
-      selected.pop();
-      this.setState({
-        cw: this.state.cw.substring(0 , this.state.cw.length - 1),
-        selected: selected
-      });
+      if (selected.pop()[2] !== 'Qu') {
+        this.setState({
+          cw: this.state.cw.substring(0 , this.state.cw.length - 1),
+          selected: selected
+        });
+      } else {
+        this.setState({
+          cw: this.state.cw.substring(0 , this.state.cw.length - 2),
+          selected: selected
+        });
+      }
       e.target.className = 'die white';
     }
   }
@@ -84,7 +90,7 @@ class App extends React.Component {
   }
 
   handleSelect(e) {
-    let letter = e.target.innerHTML;
+    let letter = e.target.innerHTML === 'Qu' ? 'QU' : e.target.innerHTML;
     let selected = this.state.selected.slice();
     let prev = selected[selected.length - 1] || [NaN, NaN, ''];
     let coord = [parseInt(e.target.dataset.pos[0]), parseInt(e.target.dataset.pos[1]), letter];
