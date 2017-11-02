@@ -68,14 +68,14 @@ class App extends React.Component {
       });
       e.target.className = 'die babyblue selected';
     } else if (isPrev) {
-      if (selected.pop()[2] !== 'Qu') {
+      if (selected.pop()[2] === 'QU') {
         this.setState({
-          cw: this.state.cw.substring(0 , this.state.cw.length - 1),
+          cw: this.state.cw.substring(0 , this.state.cw.length - 2),
           selected: selected
         });
       } else {
         this.setState({
-          cw: this.state.cw.substring(0 , this.state.cw.length - 2),
+          cw: this.state.cw.substring(0 , this.state.cw.length - 1),
           selected: selected
         });
       }
