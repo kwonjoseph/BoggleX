@@ -38,13 +38,22 @@ class App extends React.Component {
   addScore() {
     let scores = this.state.scores.slice();
     let points = this.calcPoints(this.state.cw);
-    if (this.state.cw.length) {
+    if (this.state.cw.length && !this.isSubmitted(scores, this.state.cw)) {
       scores.push([this.state.cw, points]);
       this.setState({
         scores: scores,
         total: this.state.total + points
       });
     }
+  }
+
+  isSubmitted(scores, cw) {
+    for (let i = 0; i < scores.length; i++) {
+      if (scores[i][0] === cw) {
+        return true;
+      }
+    }
+    return false
   }
 
   resetSelected() {
